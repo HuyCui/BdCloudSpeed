@@ -17,7 +17,7 @@
     selector.style.marginLeft = "250px";
     selector.style.marginBottom = "10px";
     selector.setAttribute("id", "selector");
-    let values=[1.0,1.2,1.5,1.6,1.7,2.0];
+    let values=[1.0,1.2,1.25,1.3,1.4,1.5,1.6,1.7,2.0];
     for(let i = 0; i < values.length; i++){
         selector.options.add(new Option(values[i],i));
     }
@@ -34,13 +34,26 @@
     button.onclick = function () {//绑定点击事件
          //var sp = document.getElementById('videoSpeeder').value;
         let index = selector.selectedIndex;
-        let sp = selector.options[index].value;
+        let sp = selector.options[index].text;
          let speeder = parseFloat(sp);
+        //alert(sp);
         videojs.getPlayers("video-player").html5player.tech_.setPlaybackRate(speeder);
      };
     button.style.color = "black";
 
+    let now = new Date();
+    let end = new Date('2019-12-21 08:00:00');
+    let span = end.getTime() - now.getTime();
+    let result = '距离考研还有';
+    let days = Math.floor(span / (24 * 3600 * 1000));
+    days += 1;
+    result += days+'天';
+    let pra = document.createElement("span");
+    pra.innerHTML = result;
+    pra.style.color = 'red';
+
     let x = document.getElementById("video-toolbar");
     x.appendChild(selector);
     x.appendChild(button);
+    x.appendChild(pra);
 })();
