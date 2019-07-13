@@ -12,6 +12,47 @@
     'use strict';
 
     // Your code here...
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg)){
+            return unescape(arr[2]);
+        }
+        else{
+            return null;
+        }
+    }
+
+    let logs = document.createElement("input"); //创建一个input对象（提示框按钮）
+    logs.setAttribute("type", "button");
+    logs.setAttribute("value", "记录标题");
+    logs.style.width = "60px";
+    logs.style.align = "center";
+    logs.style.marginLeft = "10px";
+    logs.style.marginBottom = "10px";
+    logs.style.background = "#B3D8FE";
+    logs.onclick = function () {//绑定点击事件
+        var title = document.getElementsByClassName("video-title-left")[0].innerText;
+        var co="vedioscookie=";
+        console.log(title);
+        document.cookie = co+title;
+     };
+    logs.style.color = "black";
+
+     let getter = document.createElement("input"); //创建一个input对象（提示框按钮）
+    getter.setAttribute("type", "button");
+    getter.setAttribute("value", "SHOW");
+    getter.style.width = "60px";
+    getter.style.align = "center";
+    getter.style.marginLeft = "10px";
+    getter.style.marginBottom = "10px";
+    getter.style.background = "#B3D8FE";
+    getter.onclick = function () {//绑定点击事件
+        let title1 = getCookie("vedioscookie");
+        alert(title1);
+     };
+    logs.style.color = "black";
+
     let selector = document.createElement("select"); //select（提示框按钮）
     selector.style.align = "center";
     selector.style.marginLeft = "250px";
@@ -44,7 +85,7 @@
     let now = new Date();
     let end = new Date('2019-12-21 08:00:00');
     let span = end.getTime() - now.getTime();
-    let result = '距离考研还有';
+    let result = '';
     let days = Math.floor(span / (24 * 3600 * 1000));
     days += 1;
     result += days+'天';
@@ -55,5 +96,7 @@
     let x = document.getElementById("video-toolbar");
     x.appendChild(selector);
     x.appendChild(button);
+    x.appendChild(logs);
+    x.appendChild(getter);
     x.appendChild(pra);
 })();
