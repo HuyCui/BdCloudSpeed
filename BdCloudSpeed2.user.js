@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         BdCloudSpeed2
+// @name         TestbdScript
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  baidu cloud tool
+// @version      0.2
+// @description  a tool
 // @match        http://*/*
 // @grant        none
+// @note         2019.07.15 修复关于cookie的bug
 // @include  https://pan.baidu.com/play/*
 // ==/UserScript==
 
@@ -35,7 +36,10 @@
         var title = document.getElementsByClassName("video-title-left")[0].innerText;
         var co="vedioscookie=";
         console.log(title);
-        document.cookie = co+title;
+        let Days = 30;
+        let exp = new Date();
+        exp.setTime(exp.getTime() + Days*24*60*60*1000);
+        document.cookie = co+title+";expires=" + exp.toGMTString();
      };
     logs.style.color = "black";
 
