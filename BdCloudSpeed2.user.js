@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         TestbdScript
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      1.0
 // @description  a tool
 // @match        http://*/*
 // @grant        none
 // @note         2019.07.15 修复关于cookie的bug
+// @note         2019.07.15 增加多条记录
 // @include  https://pan.baidu.com/play/*
 // ==/UserScript==
 
@@ -13,17 +14,17 @@
     'use strict';
 
     // Your code here...
-    function getCookie(name)
-    {
-        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-        if(arr=document.cookie.match(reg)){
-            return unescape(arr[2]);
+    
+    function getLength(obj){
+        let count = 0;
+        for(let j = 0; j < obj.length; j++){
+            let ch = obj.charAt(j);
+            if(ch == '&'){
+                count ++;
+            }
         }
-        else{
-            return null;
-        }
+        return count;
     }
-
     let logs = document.createElement("input"); //创建一个input对象（提示框按钮）
     logs.setAttribute("type", "button");
     logs.setAttribute("value", "记录标题");
@@ -34,12 +35,19 @@
     logs.style.background = "#B3D8FE";
     logs.onclick = function () {//绑定点击事件
         var title = document.getElementsByClassName("video-title-left")[0].innerText;
-        var co="vedioscookie=";
+        let titles = localStorage.getItem("localTitles");
+        if(titles != null){
+            title += "&\n"+titles;
+        }
+        let len = getLength(title);
         console.log(title);
-        let Days = 30;
-        let exp = new Date();
-        exp.setTime(exp.getTime() + Days*24*60*60*1000);
-        document.cookie = co+title+";expires=" + exp.toGMTString();
+        if(len >= 7){
+            let strs=title.split("&");
+            title = strs[0]+"&"+strs[1]+"&"+strs[2];
+        }
+        
+        localStorage.setItem("localTitles", title);
+        //localStorage.removeItem("localTitles");
      };
     logs.style.color = "black";
 
@@ -52,8 +60,12 @@
     getter.style.marginBottom = "10px";
     getter.style.background = "#B3D8FE";
     getter.onclick = function () {//绑定点击事件
-        let title1 = getCookie("vedioscookie");
-        alert(title1);
+        let titles = localStorage.getItem("localTitles");
+        if(titles == null){
+            alert("暂无记录");
+        }else{
+            alert(titles);
+        }
      };
     logs.style.color = "black";
 
@@ -62,7 +74,7 @@
     selector.style.marginLeft = "250px";
     selector.style.marginBottom = "10px";
     selector.setAttribute("id", "selector");
-    let values=[1.0,1.2,1.25,1.3,1.4,1.5,1.6,1.7,2.0];
+    let values=[0.8,1.0,1.2,1.25,1.3,1.4,1.5,1.6,1.7,2.0];
     for(let i = 0; i < values.length; i++){
         selector.options.add(new Option(values[i],i));
     }
